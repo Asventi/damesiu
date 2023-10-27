@@ -1,6 +1,6 @@
 import curses
-import asyncio
 from damesiu.graphic_engine.utils.colors import Colors
+import threading
 
 class GraphicEngine:
     """
@@ -11,20 +11,20 @@ class GraphicEngine:
         self._key = None
         self._colors = None
         self._screen = None
+        main = threading.Thread(target=self._start)
+        main.start()
 
-    def start(self):
-        """
-        La fonction principale du moteur graphique
-        """
-        curses.wrapper(asyncio.run(self.run()))
-
-        return 0
-
-    async def run(self, screen):
+    def _start(self):
         """
         La fonction principale du moteur graphique
         """
         curses.wrapper(self.run)
+        return 0
+
+    def run(self, screen):
+        """
+        La fonction principale du moteur graphique
+        """
         self._colors = Colors(curses)
         self._screen = screen
 
@@ -42,6 +42,13 @@ class GraphicEngine:
         for i in range(size):
             for j in range(size):
                 self.draw_cell(j, i, self._colors.cell_color_white)
+        pass
+
+    def print(self, string):
+        """
+        Affiche une chaine de caractere a la position x, y
+        """
+        self._screen.addstr(string)
         pass
 
     def draw_cell(self, x, y, color):
