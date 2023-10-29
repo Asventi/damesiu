@@ -1,9 +1,12 @@
 from damesiu.graphic_engine import Engine as GraphicEngine
-from damesiu.objects.board import Board
+from damesiu.objects import BoardController
+from damesiu.objects import Player
+
 
 def run():
     """
     La fonction principale du jeu
     """
+    players = [Player("Joueur 1", "blanc", 0), Player("Joueur 2", "noir", 1)]
     engine = GraphicEngine()
-    board = Board()
+    board = BoardController(players=players)
