@@ -6,8 +6,8 @@ if TYPE_CHECKING:
 
 
 class Pion:
-    def __init__(self, x, y, couleur, player: Player):
+    def __init__(self, x, y, color, player: Player):
         self.ligne = x
         self.colonne = y
-        self.couleur = couleur
+        self.color = color
         self.player = player

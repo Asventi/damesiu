@@ -6,8 +6,17 @@ class Colors:
         Initialisation des couleurs
         """
         curses.start_color()
-        curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_BLACK)
-        curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_WHITE)
-        self.cell_color_black = curses.color_pair(1)
-        self.cell_color_white = curses.color_pair(2)
+
+        curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_WHITE)
+        curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK)
+        curses.init_pair(4, curses.COLOR_BLACK, curses.COLOR_BLACK)
+
+        self.whitecell_whitepion = curses.color_pair(1)
+        self.whitecell_blackpion = curses.color_pair(2)
+        self.blackcell_whitepion = curses.color_pair(3)
+        self.blackcell_blackpion = curses.color_pair(4)
+        self.whitecell = curses.color_pair(1)
+        self.blackcell = curses.color_pair(3)
+
 

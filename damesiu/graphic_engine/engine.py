@@ -20,7 +20,7 @@ class Engine(metaclass=SingletonThreadSafe):
     def __init__(self):
         """Initialistion basique du moteur graphique"""
         self._key = None
-        self._colors = None
+        self._colors: Colors | None = None
         self._screen = None
         main = Thread(target=self._start)
         main.start()
@@ -56,15 +56,26 @@ class Engine(metaclass=SingletonThreadSafe):
         for i in range(board.size):
             for j in range(board.size):
                 self.draw_cell(board.board[i][j],
-                               self._colors.cell_color_black if (i + j) % 2 == 0 else self._colors.cell_color_white)
+                               self._colors.blackcell if (i + j) % 2 == 0 else self._colors.whitecell)
 
     def draw_cell(self, cell: Cell, color):
         """
         Dessine une cellule a la position x, y
         """
         self._screen.addstr(cell.y+1, cell.x * 3 + 1, ' ', color)
-        if cell.pion is None:
-            self._screen.addstr(cell.y + 1, cell.x * 3 + 2, ' ', color)
-        else:
-            self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', color)
         self._screen.addstr(cell.y+1, cell.x * 3 + 3, ' ', color)
+
+        if cell.pion is not None:
+            if color is self._colors.whitecell:
+                if cell.pion.color == "blanc":
+                    self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.whitecell_whitepion)
+                else:
+                    self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.whitecell_blackpion)
+            else:
+                if cell.pion.color == "blanc":
+                    self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.blackcell_whitepion)
+                else:
+                    self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.blackcell_blackpion)
+
+        else:
+            self._screen.addstr(cell.y + 1, cell.x * 3 + 2, ' ', color)
