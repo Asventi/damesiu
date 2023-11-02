@@ -10,6 +10,7 @@ import curses
 from damesiu.graphic_engine.utils.colors import Colors
 from threading import Thread
 from damesiu.helpers.singleton_patterns import SingletonThreadSafe
+import time
 
 
 class Engine(metaclass=SingletonThreadSafe):
@@ -38,17 +39,19 @@ class Engine(metaclass=SingletonThreadSafe):
         """
         self._colors = Colors(curses)
         self._screen = screen
+        curses.curs_set(False)
 
         while self._key != 'q':
             self._screen.refresh()
             self._key = self._screen.getkey()
+        time.sleep(0.1)
 
     def draw_board(self, board: BoardController):
         """
         Dessine le plateau de jeu
         """
         self._screen.addstr("-" * (board.size * 3) + "-" * 2)
-        self._screen.addstr(11, 0, "-" * (board.size * 3) + "-" * 2)
+        self._screen.addstr(board.size + 1, 0, "-" * (board.size * 3) + "-" * 2)
         for i in range(board.size):
             self._screen.addstr(i + 1, 0, "|")
             self._screen.addstr(i + 1, board.size * 3 + 1, "|")

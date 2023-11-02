@@ -35,7 +35,7 @@ class BoardController:
 
     def add_pions(self):
         for y in range(4):
-            for x in range(10):
+            for x in range(self._size):
                 if (x + y) % 2 == 0:
                     self.board[y][x-1].pion = Pion(y, x-1, "blanc", self.players[0])
                     self.board[self._size-y-1][x].pion = Pion(self._size-y-1, x, "noir", self.players[1])
