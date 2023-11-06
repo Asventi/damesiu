@@ -5,7 +5,6 @@ if TYPE_CHECKING:
     from damesiu.objects import BoardController
     from damesiu.objects import Cell
     from damesiu.objects import Pion
-
 import curses
 from damesiu.graphic_engine.utils.colors import Colors
 from threading import Thread
@@ -40,18 +39,18 @@ class Engine(metaclass=SingletonThreadSafe):
         self._colors = Colors(curses)
         self._screen = screen
         curses.curs_set(False)
-
         while self._key != 'q':
-            self._screen.refresh()
             self._key = self._screen.getkey()
-        time.sleep(0.1)
+            time.sleep(0.1)
 
     def draw_board(self, board: BoardController):
         """
         Dessine le plateau de jeu
         """
+
         self._screen.addstr("-" * (board.size * 3) + "-" * 2)
         self._screen.addstr(board.size + 1, 0, "-" * (board.size * 3) + "-" * 2)
+        print(self._screen)
         for i in range(board.size):
             self._screen.addstr(i + 1, 0, "|")
             self._screen.addstr(i + 1, board.size * 3 + 1, "|")
@@ -60,13 +59,14 @@ class Engine(metaclass=SingletonThreadSafe):
             for j in range(board.size):
                 self.draw_cell(board.board[i][j],
                                self._colors.blackcell if (i + j) % 2 == 0 else self._colors.whitecell)
+        self._screen.refresh()
 
     def draw_cell(self, cell: Cell, color):
         """
         Dessine une cellule a la position x, y
         """
-        self._screen.addstr(cell.y+1, cell.x * 3 + 1, ' ', color)
-        self._screen.addstr(cell.y+1, cell.x * 3 + 3, ' ', color)
+        self._screen.addstr(cell.y + 1, cell.x * 3 + 1, ' ', color)
+        self._screen.addstr(cell.y + 1, cell.x * 3 + 3, ' ', color)
 
         if cell.pion is not None:
             if color is self._colors.whitecell:
@@ -82,3 +82,8 @@ class Engine(metaclass=SingletonThreadSafe):
 
         else:
             self._screen.addstr(cell.y + 1, cell.x * 3 + 2, ' ', color)
+
+    def add_message(self, message: str):
+        self.test = 'coucou'
+        self._screen.addstr(5, 45, message)
+        self._screen.refresh()
