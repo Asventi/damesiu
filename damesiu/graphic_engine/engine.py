@@ -22,15 +22,8 @@ class Engine(metaclass=SingletonThreadSafe):
         self._key = None
         self._colors: Colors | None = None
         self._screen = None
-        main = Thread(target=self._start)
+        main = Thread(target=curses.wrapper, args=(self._run,))
         main.start()
-
-    def _start(self):
-        """
-        La fonction principale du moteur graphique
-        """
-        curses.wrapper(self._run)
-        return 0
 
     def _run(self, screen):
         """
@@ -88,3 +81,7 @@ class Engine(metaclass=SingletonThreadSafe):
         # Fonction pour clear le rest de la ligne pour enlever l'ancien message
         self._screen.clrtoeol()
         self._screen.refresh()
+
+    @property
+    def key(self):
+        return self._key

@@ -24,6 +24,7 @@ class BoardController:
         self.add_pions()
         self.graphic_engine.draw_board(self)
 
+
     def create_board(self):
         if len(self.board) > 0:
             self.board = []
