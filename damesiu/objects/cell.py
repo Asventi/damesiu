@@ -15,7 +15,7 @@ class Cell:
         self._pion: Pion | None = None
 
     # TODO: Fonction isBorder pour checker si la cellule est en bordure de plateuea
-    def isBorder(self) -> bool:
+    def is_border(self) -> bool:
         return False
 
     @property
