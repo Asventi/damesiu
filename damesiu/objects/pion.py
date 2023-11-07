@@ -11,3 +11,4 @@ class Pion:
         self.colonne = y
         self.color = color
         self.player = player
+        self.queen: bool = False

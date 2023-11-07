@@ -76,11 +76,12 @@ class Engine(metaclass=SingletonThreadSafe):
         else:
             self._screen.addstr(cell.y + 1, cell.x * 3 + 2, ' ', color)
 
-    def add_message(self, message: str):
-        self._screen.addstr(5, 45, message)
-        # Fonction pour clear le rest de la ligne pour enlever l'ancien message
-        self._screen.clrtoeol()
-        self._screen.refresh()
+    def add_message(self, message: str | None):
+        if message is not None:
+            self._screen.addstr(5, 45, message)
+            # Fonction pour clear le rest de la ligne pour enlever l'ancien message
+            self._screen.clrtoeol()
+            self._screen.refresh()
 
     @property
     def key(self):
