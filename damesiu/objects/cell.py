@@ -14,8 +14,10 @@ class Cell:
 
         self._pion: Pion | None = None
 
-    # TODO: Fonction isBorder pour checker si la cellule est en bordure de plateuea
+    # TODO: Fonction isBorder pour checker si la cellule est en bordure de plateueaq
     def is_border(self) -> bool:
+        if (self.x == 0 or self.y == 0) or (self.x == 9 or self.y == 9):
+            return True
         return False
 
     @property

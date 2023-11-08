@@ -12,6 +12,5 @@ def run():
     board = BoardController(players=players)
     board_selector = BoardSelector(board)
     graphic_engine = Engine()
-    graphic_engine.add_message('test de message')
 
 
