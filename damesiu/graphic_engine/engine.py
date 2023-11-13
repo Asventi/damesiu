@@ -32,10 +32,13 @@ class Engine(metaclass=SingletonThreadSafe):
         self._colors = Colors(curses)
         self._screen = screen
         curses.curs_set(False)
+        self._screen.nodelay(True)
 
-        while self._key != 'q':
-            self._key = self._screen.getkey()
-            time.sleep(0.1)
+        while self._key != 113:
+            try:
+                self._key = self._screen.getch()
+            except:
+                self._key = None
 
     def draw_board(self, board: BoardController):
         """
@@ -50,8 +53,12 @@ class Engine(metaclass=SingletonThreadSafe):
 
         for i in range(board.size):
             for j in range(board.size):
-                self.draw_cell(board.board[i][j],
-                               self._colors.blackcell if (i + j) % 2 == 0 else self._colors.whitecell)
+                cell = board.board[i][j]
+                if cell.selected:
+                    self.draw_cell(cell, self._colors.selectedcell)
+                else:
+                    self.draw_cell(cell,
+                                   self._colors.blackcell if (i + j) % 2 == 0 else self._colors.whitecell)
         self._screen.refresh()
 
     def draw_cell(self, cell: Cell, color):
@@ -62,16 +69,22 @@ class Engine(metaclass=SingletonThreadSafe):
         self._screen.addstr(cell.y + 1, cell.x * 3 + 3, ' ', color)
 
         if cell.pion is not None:
-            if color is self._colors.whitecell:
+            if cell.selected:
                 if cell.pion.color == "blanc":
-                    self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.whitecell_whitepion)
+                    self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.selectedcell_whitepion)
                 else:
-                    self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.whitecell_blackpion)
+                    self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.selectedcell_blackpion)
             else:
-                if cell.pion.color == "blanc":
-                    self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.blackcell_whitepion)
+                if color is self._colors.whitecell:
+                    if cell.pion.color == "blanc":
+                        self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.whitecell_whitepion)
+                    else:
+                        self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.whitecell_blackpion)
                 else:
-                    self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.blackcell_blackpion)
+                    if cell.pion.color == "blanc":
+                        self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.blackcell_whitepion)
+                    else:
+                        self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.blackcell_blackpion)
 
         else:
             self._screen.addstr(cell.y + 1, cell.x * 3 + 2, ' ', color)
