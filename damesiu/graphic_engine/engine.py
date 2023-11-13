@@ -42,7 +42,7 @@ class Engine(metaclass=SingletonThreadSafe):
         Dessine le plateau de jeu
         """
 
-        self._screen.addstr("-" * (board.size * 3) + "-" * 2)
+        self._screen.addstr(0, 0, "-" * (board.size * 3) + "-" * 2)
         self._screen.addstr(board.size + 1, 0, "-" * (board.size * 3) + "-" * 2)
         for i in range(board.size):
             self._screen.addstr(i + 1, 0, "|")
