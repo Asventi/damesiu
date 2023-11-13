@@ -38,9 +38,13 @@ class BoardController:
         for y in range(4):
             for x in range(self._size):
                 if (x + y) % 2 == 0:
-                    # TODO: Ajouter les pions a la liste de pion du player
-                    self.board[y][x - 1].pion = Pion(y, x - 1, "blanc", self.players[0])
-                    self.board[self._size - y - 1][x].pion = Pion(self._size - y - 1, x, "noir", self.players[1])
+                    pion1 = Pion(y, x - 1, "blanc", self.players[0])
+                    self.board[y][x - 1].pion = pion1
+                    self._players[0].pions.append(pion1)
+
+                    pion2 = Pion(self._size - y - 1, x, "noir", self.players[1])
+                    self.board[self._size - y - 1][x].pion = pion2
+                    self._players[1].pions.append(pion2)
 
     # TODO: Finir cette fonction qui devra retourner une liste de cellule jouable selon le joueur entre (la mort ptn)
     def get_playable_cells(self, pion: Pion, player: Player):

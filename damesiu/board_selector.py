@@ -18,6 +18,7 @@ class BoardSelector:
         main = Thread(target=self._run)
         main.start()
 
+    # TODO: Board selector a finir.
     def _run(self):
         while self.graphic_engine.key != 'q':
             if self.graphic_engine.key == 'KEY_UP':
