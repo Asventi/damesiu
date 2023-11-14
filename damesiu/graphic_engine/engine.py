@@ -54,7 +54,9 @@ class Engine(metaclass=SingletonThreadSafe):
         for i in range(board.size):
             for j in range(board.size):
                 cell = board.board[i][j]
-                if cell.selected:
+                if cell.highlighted:
+                    self.draw_cell(cell, self._colors.highlightedcell)
+                elif cell.selected:
                     self.draw_cell(cell, self._colors.selectedcell)
                 else:
                     self.draw_cell(cell,
@@ -69,7 +71,12 @@ class Engine(metaclass=SingletonThreadSafe):
         self._screen.addstr(cell.y + 1, cell.x * 3 + 3, ' ', color)
 
         if cell.pion is not None:
-            if cell.selected:
+            if cell.highlighted:
+                if cell.pion.color == "blanc":
+                    self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.highlightedcell_whitepion)
+                else:
+                    self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.highlightedcell_blackpion)
+            elif cell.selected:
                 if cell.pion.color == "blanc":
                     self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.selectedcell_whitepion)
                 else:
