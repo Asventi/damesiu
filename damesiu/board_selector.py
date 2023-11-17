@@ -10,9 +10,29 @@ from threading import Thread
 from damesiu.graphic_engine import Engine as GraphicEngine
 import curses
 from time import sleep
+from threading import Lock
 
 
-class BoardSelector:
+class BoardSelectorSingleton(type):
+    """
+    Thread safe singleton for Board Selector
+    """
+    _instances = {}
+    # Pour lock les thread pour eviter que deux thread instancie la classe en meme temps ce qui casserai le singleton
+    _lock: Lock = Lock()
+
+    def __call__(cls, *args, **kwargs):
+        """
+        Fonction de creation d'instance
+        """
+        with cls._lock:
+            if cls not in cls._instances:
+                instance = super().__call__(*args, **kwargs)
+                cls._instances[cls] = instance
+        return cls._instances[cls]
+
+
+class BoardSelector(metaclass=BoardSelectorSingleton):
 
     def __init__(self, board_controller: BoardController):
         self.graphic_engine = GraphicEngine()
@@ -21,7 +41,6 @@ class BoardSelector:
         self._selected_cell: Cell | None = None
         main = Thread(target=self._run)
         main.start()
-
 
     def _run(self):
         self._highlight(self._current_cell)
@@ -58,6 +77,7 @@ class BoardSelector:
         if self._current_cell == self._selected_cell:
             self._selected_cell.selected = False
             self._selected_cell = None
+            self._current_cell.highlighted = True
         else:
             # On deselectionne l'ancienne cell selectionne et on enleve l'highlight
             if self._selected_cell is not None:
@@ -67,9 +87,14 @@ class BoardSelector:
             # On selectionne la cell et on la stock
             self._selected_cell = self._current_cell
             self._selected_cell.selected = True
+            self.graphic_engine.add_message(f'Coordonnees de la case selectionnee : x: {self._current_cell.x}'
+                                            f' y: {self._current_cell.y}')
 
         # On met a jour le board
         self.update()
 
     def update(self):
         self.graphic_engine.draw_board(self.board_controller)
+
+
+
