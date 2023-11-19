@@ -37,8 +37,10 @@ class BoardSelector(metaclass=BoardSelectorSingleton):
     def __init__(self, board_controller: BoardController):
         self.graphic_engine = GraphicEngine()
         self.board_controller = board_controller
-        self._current_cell = self.board_controller.board[0][0]
+
+        self._current_cell: Cell = self.board_controller.board[0][0]
         self._selected_cell: Cell | None = None
+
         main = Thread(target=self._run)
         main.start()
 

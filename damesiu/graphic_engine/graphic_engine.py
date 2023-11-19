@@ -37,9 +37,7 @@ class Engine(metaclass=GraphicEngineSingleton):
 
     def __init__(self):
         """Initialistion basique du moteur graphique"""
-        self._key = None
-        self._colors: Colors | None = None
-        self._screen = None
+        self._key: int | None = None
         main = Thread(target=curses.wrapper, args=(self._run,))
         main.start()
 

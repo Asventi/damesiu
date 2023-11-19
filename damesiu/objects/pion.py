@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 
 
 class Pion:
-    def __init__(self, x, y, color, player: Player):
+    def __init__(self, x: int, y: int, color: str, player: Player):
         self.ligne = x
         self.colonne = y
         self.color = color
