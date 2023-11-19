@@ -1,15 +1,14 @@
 from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from damesiu.objects import BoardController
     from damesiu.objects import Cell
-    from damesiu.objects import Pion
 import curses
 from damesiu.graphic_engine.utils.colors import Colors
 from threading import Thread
 from threading import Lock
-import time
 
 
 class GraphicEngineSingleton(type):
@@ -56,7 +55,7 @@ class Engine(metaclass=GraphicEngineSingleton):
         while self._key != 113:
             try:
                 self._key = self._screen.getch()
-            except:
+            except curses.ERR:
                 self._key = None
 
     def draw_board(self, board: BoardController):
@@ -111,7 +110,6 @@ class Engine(metaclass=GraphicEngineSingleton):
                         self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.blackcell_whitepion)
                     else:
                         self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.blackcell_blackpion)
-
         else:
             self._screen.addstr(cell.y + 1, cell.x * 3 + 2, ' ', color)
 
