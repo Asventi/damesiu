@@ -93,6 +93,10 @@ class BoardSelector(metaclass=BoardSelectorSingleton):
             self.graphic_engine.add_message(f'Coordonnees de la case selectionnee : x: {self._current_cell.x}'
                                             f' y: {self._current_cell.y}')
 
+            if self._selected_cell.pion is not None:
+                for cell in self._selected_cell.pion.get_playable_cells():
+                    cell.playable = True
+
         # On met a jour le board
         self.update()
 

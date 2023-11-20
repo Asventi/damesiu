@@ -12,6 +12,7 @@ class Cell:
         self.y = y
         self.highlighted: bool = False
         self.selected: bool = False
+        self.playable: bool = False
 
         self.neighbors: list[Cell | None] = []
         self._pion: Pion | None = None

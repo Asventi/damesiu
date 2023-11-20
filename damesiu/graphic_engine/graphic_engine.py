@@ -108,6 +108,11 @@ class Engine(metaclass=GraphicEngineSingleton):
                         self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.blackcell_whitepion)
                     else:
                         self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.blackcell_blackpion)
+        elif cell.playable:
+            if color == self._colors.whitecell:
+                self._screen.addstr(cell.y + 1, cell.x * 3 + 2, '°', self._colors.whitecell_playable)
+            else:
+                self._screen.addstr(cell.y + 1, cell.x * 3 + 2, '°', self._colors.blackcell_playable)
         else:
             self._screen.addstr(cell.y + 1, cell.x * 3 + 2, ' ', color)
 
