@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from damesiu.objects import BoardController
+    from damesiu.board_controller import BoardController
     from damesiu.objects import Cell
 
 from threading import Thread

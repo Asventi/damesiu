@@ -4,8 +4,8 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from damesiu.objects import Player
 
-from .cell import Cell
-from .pion import Pion
+from damesiu.objects.cell import Cell
+from damesiu.objects.pion import Pion
 from damesiu.graphic_engine import Engine as GraphicEngine
 
 

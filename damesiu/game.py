@@ -1,4 +1,4 @@
-from damesiu.objects import BoardController
+from damesiu.board_controller import BoardController
 from damesiu.objects import Player
 from damesiu.board_selector import BoardSelector
 from damesiu.graphic_engine import Engine
