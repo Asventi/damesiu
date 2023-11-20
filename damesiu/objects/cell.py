@@ -13,6 +13,7 @@ class Cell:
         self.highlighted: bool = False
         self.selected: bool = False
 
+        self.neighbors: list[Cell | None] = []
         self._pion: Pion | None = None
 
     def is_border(self) -> bool:

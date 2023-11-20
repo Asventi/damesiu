@@ -72,6 +72,7 @@ class BoardSelector(metaclass=BoardSelectorSingleton):
         self._current_cell.highlighted = False
         cell.highlighted = True
         self._current_cell = cell
+
         self.update()
 
     def _select(self):
