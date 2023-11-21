@@ -71,50 +71,26 @@ class Engine(metaclass=GraphicEngineSingleton):
             for j in range(board.size):
                 cell = board.board[i][j]
                 if cell.highlighted:
-                    self.draw_cell(cell, self._colors.highlightedcell)
+                    self.draw_cell(cell, "highlighted")
                 elif cell.selected:
-                    self.draw_cell(cell, self._colors.selectedcell)
+                    self.draw_cell(cell, "selected")
                 else:
-                    self.draw_cell(cell,
-                                   self._colors.blackcell if (i + j) % 2 == 0 else self._colors.whitecell)
+                    self.draw_cell(cell, "black" if (i + j) % 2 == 0 else "white")
         self._screen.refresh()
 
     def draw_cell(self, cell: Cell, color):
         """
         Dessine une cellule a la position x, y
         """
-        self._screen.addstr(cell.y + 1, cell.x * 3 + 1, ' ', color)
-        self._screen.addstr(cell.y + 1, cell.x * 3 + 3, ' ', color)
+        self._screen.addstr(cell.y + 1, cell.x * 3 + 1, ' ', self._colors.get_color_pair(color))
+        self._screen.addstr(cell.y + 1, cell.x * 3 + 3, ' ', self._colors.get_color_pair(color))
 
         if cell.pion is not None:
-            if cell.highlighted:
-                if cell.pion.color == "blanc":
-                    self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.highlightedcell_whitepion)
-                else:
-                    self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.highlightedcell_blackpion)
-            elif cell.selected:
-                if cell.pion.color == "blanc":
-                    self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.selectedcell_whitepion)
-                else:
-                    self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.selectedcell_blackpion)
-            else:
-                if color is self._colors.whitecell:
-                    if cell.pion.color == "blanc":
-                        self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.whitecell_whitepion)
-                    else:
-                        self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.whitecell_blackpion)
-                else:
-                    if cell.pion.color == "blanc":
-                        self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.blackcell_whitepion)
-                    else:
-                        self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.blackcell_blackpion)
+            self._screen.addstr(cell.y + 1, cell.x * 3 + 2, 'o', self._colors.get_color_pair(color, cell.pion.color))
         elif cell.playable:
-            if color == self._colors.whitecell:
-                self._screen.addstr(cell.y + 1, cell.x * 3 + 2, '°', self._colors.whitecell_playable)
-            else:
-                self._screen.addstr(cell.y + 1, cell.x * 3 + 2, '°', self._colors.blackcell_playable)
+            self._screen.addstr(cell.y + 1, cell.x * 3 + 2, '°', self._colors.get_color_pair(color, "playable"))
         else:
-            self._screen.addstr(cell.y + 1, cell.x * 3 + 2, ' ', color)
+            self._screen.addstr(cell.y + 1, cell.x * 3 + 2, ' ', self._colors.get_color_pair(color))
 
     def add_message(self, message: str | int | None):
         if message is not None:

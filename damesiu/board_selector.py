@@ -40,6 +40,7 @@ class BoardSelector(metaclass=BoardSelectorSingleton):
 
         self._current_cell: Cell = self.board_controller.board[0][0]
         self._selected_cell: Cell | None = None
+        self._playable_cells: list[Cell] = []
 
         main = Thread(target=self._run)
         main.start()
@@ -76,7 +77,9 @@ class BoardSelector(metaclass=BoardSelectorSingleton):
         self.update()
 
     def _select(self):
-
+        for cell in self._playable_cells:
+            cell.playable = False
+        self._playable_cells = []
         if self._current_cell == self._selected_cell:
             self._selected_cell.selected = False
             self._selected_cell = None
@@ -94,7 +97,8 @@ class BoardSelector(metaclass=BoardSelectorSingleton):
                                             f' y: {self._current_cell.y}')
 
             if self._selected_cell.pion is not None:
-                for cell in self._selected_cell.pion.get_playable_cells():
+                self._playable_cells = self._selected_cell.pion.get_playable_cells()
+                for cell in self._playable_cells:
                     cell.playable = True
 
         # On met a jour le board
