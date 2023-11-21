@@ -17,6 +17,7 @@ class Colors:
         curses.init_pair(8, curses.COLOR_BLACK, curses.COLOR_GREEN)
         curses.init_pair(9, curses.COLOR_GREEN, curses.COLOR_WHITE)
         curses.init_pair(10, curses.COLOR_GREEN, curses.COLOR_BLACK)
+        curses.init_pair(11, curses.COLOR_GREEN, curses.COLOR_RED)
 
         self.whitecell_whitepion = curses.color_pair(1)
         self.whitecell_blackpion = curses.color_pair(2)
@@ -35,6 +36,34 @@ class Colors:
 
         self.whitecell_playable = curses.color_pair(9)
         self.blackcell_playable = curses.color_pair(10)
+        self.highlightedcell_playable = curses.color_pair(11)
 
+    def get_color_pair(self, cell_color, pion_color='white'):
+        if cell_color == "highlighted":
+            if pion_color == "playable":
+                return self.highlightedcell_playable
+            elif pion_color == "white":
+                return self.highlightedcell_whitepion
+            else:
+                return self.highlightedcell_blackpion
+        elif cell_color == "selected":
+            if pion_color == "white":
+                return self.selectedcell_whitepion
+            else:
+                return self.selectedcell_blackpion
+        elif cell_color == "white":
+            if pion_color == "playable":
+                return self.whitecell_playable
+            elif pion_color == "white":
+                return self.whitecell_whitepion
+            else:
+                return self.whitecell_blackpion
+        else:
+            if pion_color == "playable":
+                return self.blackcell_playable
+            elif pion_color == "white":
+                return self.blackcell_whitepion
+            else:
+                return self.blackcell_blackpion
 
 
