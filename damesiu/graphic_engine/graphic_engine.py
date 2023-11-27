@@ -9,6 +9,8 @@ import curses
 from damesiu.graphic_engine.utils.colors import Colors
 from threading import Thread
 from threading import Lock
+from time import sleep
+
 
 
 class GraphicEngineSingleton(type):
@@ -92,9 +94,9 @@ class Engine(metaclass=GraphicEngineSingleton):
         else:
             self._screen.addstr(cell.y + 1, cell.x * 3 + 2, ' ', self._colors.get_color_pair(color))
 
-    def add_message(self, message: str | int | None):
+    def add_message(self, message):
         if message is not None:
-            self._screen.addstr(5, 45, str(message))
+            self._screen.addstr(5, 35, str(message))
             # Fonction pour clear le rest de la ligne pour enlever l'ancien message
             self._screen.clrtoeol()
             self._screen.refresh()

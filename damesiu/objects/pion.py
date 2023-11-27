@@ -20,23 +20,30 @@ class Pion:
 
     def get_playable_cells(self) -> list[Cell]:
         neighbors = self.cell.neighbors
-        neighbor_nw = neighbors[directions.NW]
-        neighbor_ne = neighbors[directions.NE]
+        if self.color == 'black':
+            neighbor_w = neighbors[directions.NW]
+            neighbor_e = neighbors[directions.NE]
+        else:
+            neighbor_w = neighbors[directions.SW]
+            neighbor_e = neighbors[directions.SE]
         playable_cells = []
 
-        if neighbor_nw is not None:
-            if neighbor_nw.pion is not None:
+        if neighbor_w is not None:
+            if neighbor_w.pion is not None:
                 # TODO: Logique si il y a un pion pour verifier derriere si on peut bouffer sa grand mere la pute
                 pass
             else:
-                playable_cells.append(neighbor_nw)
+                playable_cells.append(neighbor_w)
 
-        if neighbor_ne is not None:
-            if neighbor_ne.pion is not None:
+        if neighbor_e is not None:
+            if neighbor_e.pion is not None:
                 # TODO: Logique si il y a un pion pour verifier derriere si on peut bouffer sa grand mere la pute
                 pass
             else:
-                playable_cells.append(neighbor_ne)
+                playable_cells.append(neighbor_e)
 
 
         return playable_cells
+
+    def __repr__(self):
+        return f"Pion({self.ligne}, {self.colonne}, {self.color}, {self.cell}, {self.player})"

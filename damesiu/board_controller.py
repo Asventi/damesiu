@@ -4,9 +4,10 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from damesiu.objects import Player
 
-from damesiu.objects.cell import Cell
-from damesiu.objects.pion import Pion
+from damesiu.objects import Cell
+from damesiu.objects import Pion
 from damesiu.graphic_engine import Engine as GraphicEngine
+from damesiu.board_selector import BoardSelector
 import time
 from damesiu.constants import directions
 
@@ -19,6 +20,8 @@ class BoardController:
         self.graphic_engine = GraphicEngine()
 
         self.starter()
+
+        self.board_selector = BoardSelector(self)
 
     def starter(self):
         self.create_board()
@@ -35,15 +38,17 @@ class BoardController:
             for x in range(self._size):
                 self.board[y].append(Cell(x, y))
 
+
     def add_pions(self):
-        for y in range(4):
+        pions_count = int(self._size / 2 - 1)
+        for y in range(pions_count):
             for x in range(self._size):
                 if (x + y) % 2 == 0:
-                    pion1 = Pion(y, x - 1, "blanc", self.board[y][x - 1], self.players[0])
+                    pion1 = Pion(y, x - 1, "white", self.board[y][x - 1], self.players[0])
                     self.board[y][x - 1].pion = pion1
                     self._players[0].pions.append(pion1)
 
-                    pion2 = Pion(self._size - y - 1, x, "noir", self.board[self._size - y - 1][x], self.players[1])
+                    pion2 = Pion(self._size - y - 1, x, "black", self.board[self._size - y - 1][x], self.players[1])
                     self.board[self._size - y - 1][x].pion = pion2
                     self._players[1].pions.append(pion2)
         self.set_board_neighbors()
@@ -81,6 +86,8 @@ class BoardController:
                     cell.neighbors.append(neighbor)
                 else:
                     cell.neighbors.append(None)
+
+
 
     # Propertys
     @property

@@ -1,1 +1,1 @@
-from .game import run
+from .game_controller import GameController

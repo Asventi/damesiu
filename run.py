@@ -1,3 +1,3 @@
 import damesiu
 
-damesiu.run()
+game = damesiu.GameController()
