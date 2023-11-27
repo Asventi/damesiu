@@ -72,6 +72,9 @@ class Engine(EventHandler, metaclass=GraphicEngineSingleton):
         while self._key != 113:
             try:
                 self._key = self._screen.getch()
+                if self._key != -1:
+                    self.trigger("key_pressed", key=self._key)
+
             except curses.ERR:
                 self._key = None
 

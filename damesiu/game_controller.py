@@ -17,6 +17,7 @@ class GameController:
         self.graphic_engine = Engine()
         self.graphic_engine.add_message(f'La partie commence {self.players[1].name}')
         self.board_selector.on("move_selected", self.move)
+        self.graphic_engine.on("key_pressed", self.reset)
         main = Thread(target=self.run)
         main.start()
 
@@ -24,9 +25,9 @@ class GameController:
         """
         La fonction principale du jeu
         """
-        # while self.graphic_engine.key != 113:
-        #     if self.graphic_engine.key == 114:
-        #         self.board_controller.starter()
+        while self.graphic_engine.key != 113:
+            if self.graphic_engine.key == 114:
+                self.board_controller.starter()
         pass
 
     def move(self, source: Cell, target: Cell):
@@ -34,3 +35,7 @@ class GameController:
         target.pion = source.pion
         source.pion = None
         self.graphic_engine.draw_board(self.board_controller)
+
+    def reset(self, key):
+        if key == 114:
+            self.board_controller.starter()
