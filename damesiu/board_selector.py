@@ -97,6 +97,7 @@ class BoardSelector(EventHandler, metaclass=BoardSelectorSingleton):
     def _select(self):
         if self.current_cell.playable:
             self.trigger("move_selected", source=self.selected_cell, target=self.current_cell)
+
         for cell in self.playable_cells:
             cell.playable = False
         self.playable_cells = []
@@ -114,7 +115,6 @@ class BoardSelector(EventHandler, metaclass=BoardSelectorSingleton):
             # On selectionne la cell et on la stock
             self.selected_cell = self.current_cell
             self.selected_cell.selected = True
-
             if self.selected_cell.pion is not None:
                 self.playable_cells = self.selected_cell.pion.get_playable_cells()
                 for cell in self.playable_cells:

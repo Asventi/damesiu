@@ -12,7 +12,6 @@ from threading import Lock
 from time import sleep
 
 
-
 class GraphicEngineSingleton(type):
     """
     Thread safe singleton for Graphic Engine
@@ -32,7 +31,25 @@ class GraphicEngineSingleton(type):
         return cls._instances[cls]
 
 
-class Engine(metaclass=GraphicEngineSingleton):
+class EventHandler(object):
+    callbacks = None
+
+    def on(self, eh_name, callback):
+        if self.callbacks is None:
+            self.callbacks = {}
+
+        if eh_name not in self.callbacks:
+            self.callbacks[eh_name] = [callback]
+        else:
+            self.callbacks[eh_name].append(callback)
+
+    def trigger(self, eh_name, **kwargs):
+        if self.callbacks is not None and eh_name in self.callbacks:
+            for callback in self.callbacks[eh_name]:
+                callback(**kwargs)
+
+
+class Engine(EventHandler, metaclass=GraphicEngineSingleton):
     """
     La classe moteur graphique console pour le jeu
     """
