@@ -28,7 +28,11 @@ class Cell:
 
     @pion.setter
     def pion(self, pion: Pion):
-        if self._pion is None:
+        if self._pion is None or pion is None:
             self._pion = pion
+            if self._pion is not None:
+                self._pion.y = self.y
+                self._pion.x = self.x
+                self._pion.cell = self
         else:
             raise Exception("La cellule est déjà occupée")

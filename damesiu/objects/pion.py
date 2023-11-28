@@ -20,12 +20,9 @@ class Pion:
 
     def get_playable_cells(self) -> list[Cell]:
         neighbors = self.cell.neighbors
-        if self.color == 'black':
-            neighbor_w = neighbors[directions.NW]
-            neighbor_e = neighbors[directions.NE]
-        else:
-            neighbor_w = neighbors[directions.SW]
-            neighbor_e = neighbors[directions.SE]
+        direction = directions.N if self.color == 'black' else directions.S
+        neighbor_w = neighbors[direction + 1]
+        neighbor_e = neighbors[direction - 1]
         playable_cells = []
 
         if neighbor_w is not None:

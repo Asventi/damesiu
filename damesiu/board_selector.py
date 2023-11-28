@@ -59,33 +59,30 @@ class BoardSelector(EventHandler, metaclass=BoardSelectorSingleton):
         self.current_cell: Cell = self.board_controller.board[0][0]
         self.selected_cell: Cell | None = None
         self.playable_cells: list[Cell] = []
-
-        main = Thread(target=self._run)
-        main.start()
-
-    def _run(self):
         self._highlight(self.current_cell)
-        while self.graphic_engine.key != 113:
-            if self.graphic_engine.key == curses.KEY_UP and self.current_cell.y - 1 >= 0:
-                self._highlight(self.board_controller.board[self.current_cell.y - 1][self.current_cell.x])
-                # On evite la duplication de touches
-                sleep(0.1)
 
-            elif self.graphic_engine.key == curses.KEY_LEFT and self.current_cell.x - 1 >= 0:
-                self._highlight(self.board_controller.board[self.current_cell.y][self.current_cell.x - 1])
-                sleep(0.1)
+        self.graphic_engine.on("key_pressed", self._move_cursor)
 
-            elif self.graphic_engine.key == curses.KEY_DOWN and self.current_cell.y + 1 < self.board_controller.size:
-                self._highlight(self.board_controller.board[self.current_cell.y + 1][self.current_cell.x])
-                sleep(0.1)
+    def _move_cursor(self, key):
+        self._highlight(self.current_cell)
+        if key == curses.KEY_UP and self.current_cell.y - 1 >= 0:
+            self._highlight(self.board_controller.board[self.current_cell.y - 1][self.current_cell.x])
+            # On evite la duplication de touches
 
-            elif self.graphic_engine.key == curses.KEY_RIGHT and self.current_cell.x + 1 < self.board_controller.size:
-                self._highlight(self.board_controller.board[self.current_cell.y][self.current_cell.x + 1])
-                sleep(0.1)
 
-            elif self.graphic_engine.key == 10:
-                self._select()
-                sleep(0.1)
+        elif key == curses.KEY_LEFT and self.current_cell.x - 1 >= 0:
+            self._highlight(self.board_controller.board[self.current_cell.y][self.current_cell.x - 1])
+
+
+        elif key == curses.KEY_DOWN and self.current_cell.y + 1 < self.board_controller.size:
+            self._highlight(self.board_controller.board[self.current_cell.y + 1][self.current_cell.x])
+
+
+        elif key == curses.KEY_RIGHT and self.current_cell.x + 1 < self.board_controller.size:
+            self._highlight(self.board_controller.board[self.current_cell.y][self.current_cell.x + 1])
+
+        elif key == 10:
+            self._select()
 
     def _highlight(self, cell):
         self.current_cell.highlighted = False
@@ -97,6 +94,7 @@ class BoardSelector(EventHandler, metaclass=BoardSelectorSingleton):
     def _select(self):
         if self.current_cell.playable:
             self.trigger("move_selected", source=self.selected_cell, target=self.current_cell)
+
         for cell in self.playable_cells:
             cell.playable = False
         self.playable_cells = []
@@ -114,7 +112,6 @@ class BoardSelector(EventHandler, metaclass=BoardSelectorSingleton):
             # On selectionne la cell et on la stock
             self.selected_cell = self.current_cell
             self.selected_cell.selected = True
-
             if self.selected_cell.pion is not None:
                 self.playable_cells = self.selected_cell.pion.get_playable_cells()
                 for cell in self.playable_cells:

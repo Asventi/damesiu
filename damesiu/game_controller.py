@@ -3,6 +3,7 @@ from damesiu.objects import Player
 from damesiu.board_selector import BoardSelector
 from damesiu.graphic_engine import Engine
 from damesiu.objects import Cell
+from threading import Thread
 
 
 class GameController:
@@ -15,13 +16,25 @@ class GameController:
         self.graphic_engine = Engine()
         self.graphic_engine.add_message(f'La partie commence {self.players[1].name}')
         self.board_selector.on("move_selected", self.move)
-        self.run()
+        self.graphic_engine.on("key_pressed", self.reset)
+        main = Thread(target=self.run)
+        main.start()
 
     def run(self):
         """
         La fonction principale du jeu
         """
+        while self.graphic_engine.key != 113:
+            if self.graphic_engine.key == 114:
+                self.board_controller.starter()
+        pass
 
     def move(self, source: Cell, target: Cell):
         self.graphic_engine.add_message(f'{source} -> {target}')
-        pass
+        target.pion = source.pion
+        source.pion = None
+        self.graphic_engine.draw_board(self.board_controller)
+
+    def reset(self, key):
+        if key == 114:
+            self.board_controller.starter()
