@@ -3,7 +3,6 @@ from damesiu.objects import Player
 from damesiu.board_selector import BoardSelector
 from damesiu.graphic_engine import Engine
 from damesiu.objects import Cell
-from time import sleep
 from threading import Thread
 
 
