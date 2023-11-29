@@ -7,10 +7,11 @@ if TYPE_CHECKING:
 
 class Player:
 
-    def __init__(self, name: str, color: str, playercode: int):
+    def __init__(self, name: str, color: str, playercode: int, is_ia: bool = False):
         self.name = name
         self.color = color
         self.playercode = playercode
+        self.is_ia = is_ia
 
         self.score: int = 0
         self.pions: list[Pion] = []

@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from damesiu.board_controller import BoardController
+    from damesiu.controllers.board_controller import BoardController
     from damesiu.objects import Cell
 import curses
 from damesiu.graphic_engine.utils.colors import Colors
@@ -120,6 +120,18 @@ class Engine(EventHandler, metaclass=GraphicEngineSingleton):
             # Fonction pour clear le rest de la ligne pour enlever l'ancien message
             self._screen.clrtoeol()
             self._screen.refresh()
+
+    def add_alert(self, message):
+        if message is not None:
+            self._screen.addstr(6, 35, str(message))
+            # Fonction pour clear le rest de la ligne pour enlever l'ancien message
+            self._screen.clrtoeol()
+            self._screen.refresh()
+
+    def clear_alert(self):
+        self._screen.addstr(6, 35, " ")
+        self._screen.clrtoeol()
+        self._screen.refresh()
 
     @property
     def key(self):

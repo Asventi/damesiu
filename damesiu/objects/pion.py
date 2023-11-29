@@ -1,8 +1,8 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 
 if TYPE_CHECKING:
-    from damesiu.objects import Player
+    from damesiu.objects import Player, Cell
     from damesiu.objects import Cell
 
 from damesiu.constants import directions
@@ -18,29 +18,45 @@ class Pion:
         self.cell = cell
         self.queen: bool = False
 
-    def get_playable_cells(self) -> list[Cell]:
-        neighbors = self.cell.neighbors
-        direction = directions.N if self.color == 'black' else directions.S
-        neighbor_w = neighbors[direction + 1]
-        neighbor_e = neighbors[direction - 1]
+    def get_playable_cells(self, direction: str = None, only_eat: bool = False) -> list[Cell]:
+        if direction is None:
+            direction = directions.N if self.color == 'black' else directions.S
         playable_cells = []
 
-        if neighbor_w is not None:
-            if neighbor_w.pion is not None:
-                # TODO: Logique si il y a un pion pour verifier derriere si on peut bouffer sa grand mere la pute
-                pass
-            else:
-                playable_cells.append(neighbor_w)
+        if direction == 'all':
+            if self.get_playable_cell(directions.NE, True) is not None:
+                playable_cells.append(self.get_playable_cell(directions.NE, True))
 
-        if neighbor_e is not None:
-            if neighbor_e.pion is not None:
-                # TODO: Logique si il y a un pion pour verifier derriere si on peut bouffer sa grand mere la pute
-                pass
-            else:
-                playable_cells.append(neighbor_e)
+            if self.get_playable_cell(directions.SE, True) is not None:
+                playable_cells.append(self.get_playable_cell(directions.SE, True))
 
+            if self.get_playable_cell(directions.NW, True) is not None:
+                playable_cells.append(self.get_playable_cell(directions.NW, True))
+
+            if self.get_playable_cell(directions.SW, True) is not None:
+                playable_cells.append(self.get_playable_cell(directions.SW, True))
+
+        else:
+            if self.get_playable_cell(direction - 1, only_eat=only_eat) is not None:
+                playable_cells.append(self.get_playable_cell(direction - 1, only_eat=only_eat))
+
+            if self.get_playable_cell(direction + 1, only_eat=only_eat) is not None:
+                playable_cells.append(self.get_playable_cell(direction + 1, only_eat=only_eat))
 
         return playable_cells
+
+    def get_playable_cell(self, direction, only_eat: bool = False) -> Cell | None:
+        neighbor = self.cell.neighbors[direction]
+
+        if neighbor is not None:
+            if neighbor.pion is not None:
+                if neighbor.pion.color != self.color:
+                    neighbor_eat = neighbor.pion.cell.neighbors[direction]
+                    if neighbor_eat is not None and neighbor_eat.pion is None:
+                        return neighbor_eat
+            elif not only_eat:
+                return neighbor
+        return None
 
     def __repr__(self):
         return f"Pion({self.ligne}, {self.colonne}, {self.color}, {self.cell}, {self.player})"

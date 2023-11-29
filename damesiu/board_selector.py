@@ -3,15 +3,14 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from damesiu.board_controller import BoardController
+    from damesiu.controllers.board_controller import BoardController
     from damesiu.objects import Cell
 
-from threading import Thread
 from damesiu.graphic_engine import Engine as GraphicEngine
+from damesiu.game_state import GameState
 import curses
-from time import sleep
 from threading import Lock
-
+from damesiu.constants import directions
 
 class BoardSelectorSingleton(type):
     """
@@ -55,6 +54,7 @@ class BoardSelector(EventHandler, metaclass=BoardSelectorSingleton):
     def __init__(self, board_controller: BoardController):
         self.graphic_engine = GraphicEngine()
         self.board_controller = board_controller
+        self.game_state = GameState()
 
         self.current_cell: Cell = self.board_controller.board[0][0]
         self.selected_cell: Cell | None = None
@@ -65,21 +65,17 @@ class BoardSelector(EventHandler, metaclass=BoardSelectorSingleton):
 
     def _move_cursor(self, key):
         self._highlight(self.current_cell)
-        if key == curses.KEY_UP and self.current_cell.y - 1 >= 0:
-            self._highlight(self.board_controller.board[self.current_cell.y - 1][self.current_cell.x])
-            # On evite la duplication de touches
+        if key == curses.KEY_UP and self.current_cell.neighbors[directions.N]:
+            self._highlight(self.current_cell.neighbors[directions.N])
 
+        elif key == curses.KEY_DOWN and self.current_cell.neighbors[directions.S]:
+            self._highlight(self.current_cell.neighbors[directions.S])
 
-        elif key == curses.KEY_LEFT and self.current_cell.x - 1 >= 0:
-            self._highlight(self.board_controller.board[self.current_cell.y][self.current_cell.x - 1])
+        elif key == curses.KEY_LEFT and self.current_cell.neighbors[directions.W]:
+            self._highlight(self.current_cell.neighbors[directions.W])
 
-
-        elif key == curses.KEY_DOWN and self.current_cell.y + 1 < self.board_controller.size:
-            self._highlight(self.board_controller.board[self.current_cell.y + 1][self.current_cell.x])
-
-
-        elif key == curses.KEY_RIGHT and self.current_cell.x + 1 < self.board_controller.size:
-            self._highlight(self.board_controller.board[self.current_cell.y][self.current_cell.x + 1])
+        elif key == curses.KEY_RIGHT and self.current_cell.neighbors[directions.E]:
+            self._highlight(self.current_cell.neighbors[directions.E])
 
         elif key == 10:
             self._select()
@@ -92,8 +88,17 @@ class BoardSelector(EventHandler, metaclass=BoardSelectorSingleton):
         self.update()
 
     def _select(self):
+        if self.current_cell.pion is not None and self.current_cell.pion.player != self.game_state.current_player:
+            self.graphic_engine.add_alert("Ce n'est pas votre pion ou ce n'est pas votre tour !")
+            return
+
         if self.current_cell.playable:
             self.trigger("move_selected", source=self.selected_cell, target=self.current_cell)
+            return
+
+        if self.game_state.pion_lock is not None:
+            self.graphic_engine.add_alert("Vous avez des pions a finir de manger.")
+            return
 
         for cell in self.playable_cells:
             cell.playable = False

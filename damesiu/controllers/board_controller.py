@@ -21,7 +21,6 @@ class BoardController:
 
         self.starter()
 
-        self.board_selector = BoardSelector(self)
 
     def starter(self):
         self.create_board()
@@ -73,13 +72,12 @@ class BoardController:
                 else:
                     cell.neighbors.append(None)
 
-                if y != self._size - 1:
-                    for i in range(3):
-                        if 0 <= cell.x - i + 1 < self._size:
-                            neighbor = self.board[y + 1][cell.x - i + 1]
-                            cell.neighbors.append(neighbor)
-                        else:
-                            cell.neighbors.append(None)
+                for i in range(3):
+                    if 0 <= cell.x - i + 1 < self._size and y != self._size - 1:
+                        neighbor = self.board[y + 1][cell.x - i + 1]
+                        cell.neighbors.append(neighbor)
+                    else:
+                        cell.neighbors.append(None)
 
                 if cell.x - 1 >= 0:
                     neighbor = self.board[y][cell.x - 1]
