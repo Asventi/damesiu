@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 
 from damesiu.objects import Cell
 from damesiu.objects import Pion
-from damesiu.graphic_engine import Engine as GraphicEngine
+from damesiu.graphic_engine import GraphicEngine
 
 
 class BoardController:
@@ -31,7 +31,7 @@ class BoardController:
         for y in range(self._size):
             self.board.append([])
             for x in range(self._size):
-                self.board[y].append(Cell(x, y))
+                self.board[y].append(Cell(y, x))
 
     def add_pions(self):
         pions_count = int(self._size / 2 - 1)
@@ -40,11 +40,9 @@ class BoardController:
                 if (x + y) % 2 == 0:
                     pion1 = Pion(y, x - 1, "white", self.board[y][x - 1], self.players[0])
                     self.board[y][x - 1].pion = pion1
-                    self._players[0].pions.append(pion1)
 
                     pion2 = Pion(self._size - y - 1, x, "black", self.board[self._size - y - 1][x], self.players[1])
                     self.board[self._size - y - 1][x].pion = pion2
-                    self._players[1].pions.append(pion2)
         self.set_board_neighbors()
 
     def set_board_neighbors(self):

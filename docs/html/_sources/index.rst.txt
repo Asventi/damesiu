@@ -1,0 +1,25 @@
+.. Damesiu documentation master file, created by
+   sphinx-quickstart on Thu Nov 30 15:34:55 2023.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Bienvenue sur la documentation du projet de jeu Damesiu !
+=========================================================
+**Damesiu** (/dame'siou/) est un jeu de dames en python realise dans le cadre du
+projet de programmation de premiere annee en BCSIU a l'ECAM LaSalle.
+Vous pouvez retrouver ici le `Repo GitHub <https://github.com/Asventi/damesiu/>`_
+Cette documentation a ete realisee avec `Sphinx <http://www.sphinx-doc.org/en/master/>`_
+
+.. note::
+
+   Les regles du jeu sont disponibles dans le fichier `README.md` du projet.
+
+
+.. toctree::
+   :caption: Utilisation
+   :maxdepth: 2
+
+   installation
+   lancement
+   commentjouer
+

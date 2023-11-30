@@ -1,0 +1,24 @@
+Lancement
+==========
+
+Pour lancer le jeu, verifiez que vous avec bien
+`Pyton 3.11 <https://www.python.org/downloads/release/python-3116/>`_
+sur votre machine avec :
+
+.. code-block:: console
+
+    $ python --version
+    ou
+    $ python3 --version
+
+Ensuite ouvrez un terminal a l'emplacement du jeu et lancez le jeu avec :
+
+.. code-block:: console
+
+    $ python run.py
+    ou
+    $ python3 run.py
+
+.. warning::
+    Si vous etes sur windows, n'utilisez pas le terminal car
+    il reagit mal avec curses depuis windows 10. Utilisez le powershell de windows.

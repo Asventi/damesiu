@@ -1,0 +1,6 @@
+Comment jouer
+==============
+Pour jouer, utilisez les fleches directionnelles pour vous deplacer et
+entree pour selectionner un pion, et selectionnez ensuite une case jouable
+representee par les ° vert, si vous pouvez sauter plusieurs pions vous
+devrez rejouer.

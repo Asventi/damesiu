@@ -7,14 +7,14 @@ class Colors:
         """
         curses.start_color()
 
-        curses.init_pair(1, curses.COLOR_WHITE, curses.COLOR_WHITE)
-        curses.init_pair(2, curses.COLOR_BLACK, curses.COLOR_WHITE)
-        curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLACK)
-        curses.init_pair(4, curses.COLOR_BLACK, curses.COLOR_BLACK)
-        curses.init_pair(5, curses.COLOR_WHITE, curses.COLOR_RED)
-        curses.init_pair(6, curses.COLOR_BLACK, curses.COLOR_RED)
-        curses.init_pair(7, curses.COLOR_WHITE, curses.COLOR_GREEN)
-        curses.init_pair(8, curses.COLOR_BLACK, curses.COLOR_GREEN)
+        curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_WHITE)
+        curses.init_pair(2, curses.COLOR_YELLOW, curses.COLOR_WHITE)
+        curses.init_pair(3, curses.COLOR_CYAN, curses.COLOR_BLACK)
+        curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+        curses.init_pair(5, curses.COLOR_CYAN, curses.COLOR_RED)
+        curses.init_pair(6, curses.COLOR_YELLOW, curses.COLOR_RED)
+        curses.init_pair(7, curses.COLOR_CYAN, curses.COLOR_GREEN)
+        curses.init_pair(8, curses.COLOR_YELLOW, curses.COLOR_GREEN)
         curses.init_pair(9, curses.COLOR_GREEN, curses.COLOR_WHITE)
         curses.init_pair(10, curses.COLOR_GREEN, curses.COLOR_BLACK)
         curses.init_pair(11, curses.COLOR_GREEN, curses.COLOR_RED)
@@ -38,7 +38,15 @@ class Colors:
         self.blackcell_playable = curses.color_pair(10)
         self.highlightedcell_playable = curses.color_pair(11)
 
-    def get_color_pair(self, cell_color, pion_color='white'):
+    def get_color_pair(self, cell_color: str, pion_color: str = 'white') -> int:
+        """
+        Renvoie le code couleur en fonction de la couleur de la cellule et du pion
+
+        :param cell_color: Couleur de la cellule
+        :param pion_color: Couleur du pion
+        :return: Code couleur
+        :rtype: int
+        """
         if cell_color == "highlighted":
             if pion_color == "playable":
                 return self.highlightedcell_playable
@@ -65,5 +73,3 @@ class Colors:
                 return self.blackcell_whitepion
             else:
                 return self.blackcell_blackpion
-
-

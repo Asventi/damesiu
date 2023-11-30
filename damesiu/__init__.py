@@ -1,1 +1,1 @@
-from damesiu.controllers.game_controller import GameController
+from .controllers.game_controller import GameController

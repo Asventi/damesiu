@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Optional
 
 if TYPE_CHECKING:
     from damesiu.controllers.board_controller import BoardController
@@ -9,12 +9,14 @@ import curses
 from damesiu.graphic_engine.utils.colors import Colors
 from threading import Thread
 from threading import Lock
-from time import sleep
+from damesiu.utils import EventHandler
+
 
 
 class GraphicEngineSingleton(type):
     """
-    Thread safe singleton for Graphic Engine
+    Thread safe singleton pour le moteur graphique, permet d'eviter d'avoir plusieurs instance du moteur graphique
+    et d'avoir la meme a chaque appel
     """
     _instances = {}
     # Pour lock les thread pour eviter que deux thread instancie la classe en meme temps ce qui casserai le singleton
@@ -31,44 +33,34 @@ class GraphicEngineSingleton(type):
         return cls._instances[cls]
 
 
-class EventHandler(object):
-    callbacks = None
-
-    def on(self, eh_name, callback):
-        if self.callbacks is None:
-            self.callbacks = {}
-
-        if eh_name not in self.callbacks:
-            self.callbacks[eh_name] = [callback]
-        else:
-            self.callbacks[eh_name].append(callback)
-
-    def trigger(self, eh_name, **kwargs):
-        if self.callbacks is not None and eh_name in self.callbacks:
-            for callback in self.callbacks[eh_name]:
-                callback(**kwargs)
-
-
 class Engine(EventHandler, metaclass=GraphicEngineSingleton):
     """
     La classe moteur graphique console pour le jeu
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialistion basique du moteur graphique"""
-        self._key: int | None = None
+        self._key: Optional[int] = None
         main = Thread(target=curses.wrapper, args=(self._run,))
         main.start()
 
-    def _run(self, screen):
+    def _run(self, screen) -> None:
         """
-        La fonction principale du moteur graphique
+        La fonction principale du moteur graphique screen est renvoyé par curses.wrapper
         """
-        self._colors = Colors(curses)
+        # Initialisation des couleurs pour le terminal
+        self._colors: Colors = Colors(curses)
         self._screen = screen
         curses.curs_set(False)
         self._screen.nodelay(True)
+        # Verification de la taille de la fenetre
+        y, x = self._screen.getmaxyx()
+        while y < 12 or x < 102:
+            self._screen.addstr(0, 0, f"La taille de la fenetre doit etre de 102x12, taille actuelle : {x} {y}")
+            self._screen.refresh()
+            y, x = self._screen.getmaxyx()
 
+        # Boucle qui garde le moteur graphique en vie et gere les evenements clavier
         while self._key != 113:
             try:
                 self._key = self._screen.getch()
@@ -77,10 +69,13 @@ class Engine(EventHandler, metaclass=GraphicEngineSingleton):
 
             except curses.ERR:
                 self._key = None
+        curses.endwin()
 
-    def draw_board(self, board: BoardController):
+    def draw_board(self, board: BoardController) -> None:
         """
-        Dessine le plateau de jeu
+        Dessine le plateau de jeu a partir du board controller
+
+        :param board: Board controller
         """
 
         self._screen.addstr(0, 0, "-" * (board.size * 3) + "-" * 2)
@@ -100,10 +95,17 @@ class Engine(EventHandler, metaclass=GraphicEngineSingleton):
                     self.draw_cell(cell, "black" if (i + j) % 2 == 0 else "white")
         self._screen.refresh()
 
-    def draw_cell(self, cell: Cell, color):
+    def draw_cell(self, cell: Cell, color: str) -> None:
         """
-        Dessine une cellule a la position x, y
+        Dessine une cellule en fonction de sa position y x et l'adapte aux coordonnées du terminal
+
+        :param cell: Cellule a dessiner
+        :param color: Couleur de la cellule : "black" ou "white"
+        :raises ValueError: Si la couleur n'est pas "black" ou "white"
         """
+        if color not in ["black", "white", "highlighted", "selected"]:
+            raise ValueError("Color must be black, white, highlighted or selected")
+
         self._screen.addstr(cell.y + 1, cell.x * 3 + 1, ' ', self._colors.get_color_pair(color))
         self._screen.addstr(cell.y + 1, cell.x * 3 + 3, ' ', self._colors.get_color_pair(color))
 
@@ -114,25 +116,53 @@ class Engine(EventHandler, metaclass=GraphicEngineSingleton):
         else:
             self._screen.addstr(cell.y + 1, cell.x * 3 + 2, ' ', self._colors.get_color_pair(color))
 
-    def add_message(self, message):
+    def add_message(self, message: Any) -> None:
+        """
+        Ajoute un message dans la zone de message du moteur graphique, cast automatiquement le message en string
+
+        :param message: Message a afficher
+        """
         if message is not None:
             self._screen.addstr(5, 35, str(message))
             # Fonction pour clear le rest de la ligne pour enlever l'ancien message
             self._screen.clrtoeol()
             self._screen.refresh()
 
-    def add_alert(self, message):
+    def add_alert(self, message: Any):
+        """
+        Ajoute un message dans la zone d'alerte du moteur graphique, cast automatiquement le message en string
+
+        :param message: Message a afficher
+        """
         if message is not None:
             self._screen.addstr(6, 35, str(message))
             # Fonction pour clear le rest de la ligne pour enlever l'ancien message
             self._screen.clrtoeol()
             self._screen.refresh()
 
-    def clear_alert(self):
+    def clear_alert(self) -> None:
+        """
+        Efface le message d'alerte utile pour pas que le message d'alerte reste affiché en permanence
+        """
         self._screen.addstr(6, 35, " ")
+        self._screen.clrtoeol()
+        self._screen.refresh()
+
+    def set_score(self, score: int, name: str, y: int) -> None:
+        """
+        Affiche le score d'un joueur, y est le playercode du joueur, ca sert a savoir ou afficher le score
+
+        :param score: Score du joueur
+        :param name: Nom du joueur
+        :param y: Playercode du joueur
+        """
+        self._screen.addstr(0 + y, 35, f"{name} : {score}")
         self._screen.clrtoeol()
         self._screen.refresh()
 
     @property
     def key(self):
         return self._key
+
+    def __del__(self):
+        curses.endwin()

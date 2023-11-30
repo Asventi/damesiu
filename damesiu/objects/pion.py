@@ -9,16 +9,36 @@ from damesiu.constants import directions
 
 
 class Pion:
-    def __init__(self, x: int, y: int, color: str, cell: Cell, player: Player):
-        self.ligne = x
-        self.colonne = y
+    """
+    Classe representant un pion, il contient sa position, sa couleur, la cellule dans laquelle il est et le joueur
+    auquel il appartient. La couleur sert aussi a representé le joueur auquel il appartient.
+
+    :param y: Position y du pion y etant la ligne
+    :param x: Position x du pion x etant la colonne
+    :param color: Couleur du pion, white ou black
+    :param cell: Cellule dans laquelle se trouve le pion
+    :param player: Joueur auquel appartient le pion
+    """
+    def __init__(self, y: int, x: int, color: str, cell: Cell, player: Player):
+        self.x = x
+        self.y = y
         self.color = color
         self.player = player
-
         self.cell = cell
-        self.queen: bool = False
+        self.player.pions.append(self)
 
-    def get_playable_cells(self, direction: str = None, only_eat: bool = False) -> list[Cell]:
+    def get_playable_cells(self, direction: str = None, only_eat: bool = False) -> List[Cell]:
+        """
+        Fonction qui retourne les cellules jouables pour le pion, si la direction est None, retourne les cellules
+        jouables dans toutes les directions, sinon retourne les cellules jouables dans la direction du pion.
+        Peut retourner seulement les cellules jouables pour manger un pion adverse. Quand direction est all only_eat est
+        a True dans tout les cas.
+
+        :param direction: Direction dans laquelle chercher les cellules jouables, None ou all
+        :param only_eat: Retourne ou pas seulement les cellules jouables pour manger un pion adverse
+        :return: Liste des cellules jouables
+        :rtype: List[Cell]
+        """
         if direction is None:
             direction = directions.N if self.color == 'black' else directions.S
         playable_cells = []
@@ -58,5 +78,9 @@ class Pion:
                 return neighbor
         return None
 
+    def delete(self):
+        self.cell.pion = None
+        self.player.pions.remove(self)
+
     def __repr__(self):
-        return f"Pion({self.ligne}, {self.colonne}, {self.color}, {self.cell}, {self.player})"
+        return f"Pion({self.y}, {self.x}, {self.color}, {self.cell}, {self.player})"

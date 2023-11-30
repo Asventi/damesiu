@@ -1,0 +1,20 @@
+
+Installation
+=============
+
+Pour utiliser Damesiu, installez d'abord les dependances requises pour le jeu :
+
+.. code-block:: console
+
+   $ pip install requirements.txt
+
+.. warning::
+    Damesiu utilise la librairie native
+    `curses <https://docs.python.org/3/library/curses.html>`_ de python pour
+    gerer l'affichage du jeu. Cette librairie n'est pas disponible sur Windows.
+    Si vous etes sur windows vous devez installer la librairie pour windows :
+
+    .. code-block:: console
+
+        $ pip install windows-curses
+

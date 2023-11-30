@@ -1,0 +1,51 @@
+Utilisation
+============
+
+Installation
+------------
+
+Pour utiliser Damesiu, installez d'abord les dependances requises pour le jeu :
+
+.. code-block:: console
+
+   $ pip install requirements.txt
+
+**Important** : Damesiu utilise la librairie native
+`curses <https://docs.python.org/3/library/curses.html>`_ de python pour
+gerer l'affichage du jeu. Cette librairie n'est pas disponible sur Windows.
+Si vous etes sur windows vous devez installer la librairie pour windows :
+
+.. code-block:: console
+
+   $ pip install windows-curses
+
+Lancement
+----------
+
+Pour lancer le jeu, verifiez que vous avec bien
+`Pyton 3.11 <https://www.python.org/downloads/release/python-3116/>`_
+sur votre machine avec :
+
+.. code-block:: console
+
+    $ python --version
+    ou
+    $ python3 --version
+
+Ensuite ouvrez un terminal a l'emplacement du jeu et lancez le jeu avec :
+
+.. code-block:: console
+
+    $ python run.py
+    ou
+    $ python3 run.py
+
+**Important** : Si vous etes sur windows, n'utilisez pas le terminal car
+il reagit mal avec curses depuis windows 10. Utilisez le powershell de windows.
+
+Comment jouer
+-------------
+Pour jouer, utilisez les fleches directionnelles pour vous deplacer et
+entree pour selectionner un pion, et selectionnez ensuite une case jouable
+representee par les ° vert, si vous pouvez sauter plusieurs pions vous
+devrez rejouer.

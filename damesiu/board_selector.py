@@ -6,11 +6,13 @@ if TYPE_CHECKING:
     from damesiu.controllers.board_controller import BoardController
     from damesiu.objects import Cell
 
-from damesiu.graphic_engine import Engine as GraphicEngine
+from damesiu.graphic_engine import GraphicEngine
 from damesiu.game_state import GameState
 import curses
 from threading import Lock
 from damesiu.constants import directions
+from damesiu.utils import EventHandler
+
 
 class BoardSelectorSingleton(type):
     """
@@ -29,24 +31,6 @@ class BoardSelectorSingleton(type):
                 instance = super().__call__(*args, **kwargs)
                 cls._instances[cls] = instance
         return cls._instances[cls]
-
-
-class EventHandler(object):
-    callbacks = None
-
-    def on(self, eh_name, callback):
-        if self.callbacks is None:
-            self.callbacks = {}
-
-        if eh_name not in self.callbacks:
-            self.callbacks[eh_name] = [callback]
-        else:
-            self.callbacks[eh_name].append(callback)
-
-    def trigger(self, eh_name, **kwargs):
-        if self.callbacks is not None and eh_name in self.callbacks:
-            for callback in self.callbacks[eh_name]:
-                callback(**kwargs)
 
 
 class BoardSelector(EventHandler, metaclass=BoardSelectorSingleton):
@@ -81,7 +65,6 @@ class BoardSelector(EventHandler, metaclass=BoardSelectorSingleton):
             self._select()
 
     def _highlight(self, cell):
-        self.graphic_engine.add_message(f"Cellule selectionnee : {cell.x} {cell.y}")
         self.current_cell.highlighted = False
         cell.highlighted = True
         self.current_cell = cell
