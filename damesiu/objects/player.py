@@ -4,6 +4,8 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from damesiu.objects import Pion
 
+from damesiu.ia import IA
+
 
 class Player:
 
@@ -12,6 +14,8 @@ class Player:
         self.color = color
         self.playercode = playercode
         self.is_ia = is_ia
+        if self.is_ia:
+            self.ia = IA()
 
         self.score: int = 0
         self.pions: list[Pion] = []

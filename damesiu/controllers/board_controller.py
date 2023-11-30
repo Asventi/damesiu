@@ -7,9 +7,7 @@ if TYPE_CHECKING:
 from damesiu.objects import Cell
 from damesiu.objects import Pion
 from damesiu.graphic_engine import Engine as GraphicEngine
-from damesiu.board_selector import BoardSelector
-import time
-from damesiu.constants import directions
+
 
 class BoardController:
     def __init__(self, players: list[Player], size: int = 10):
@@ -21,7 +19,6 @@ class BoardController:
 
         self.starter()
 
-
     def starter(self):
         self.create_board()
         self.add_pions()
@@ -31,12 +28,10 @@ class BoardController:
         if len(self.board) > 0:
             self.board = []
 
-        # TODO: Ajouter les voisins de la Cell a chaque creation
         for y in range(self._size):
             self.board.append([])
             for x in range(self._size):
                 self.board[y].append(Cell(x, y))
-
 
     def add_pions(self):
         pions_count = int(self._size / 2 - 1)
@@ -51,10 +46,6 @@ class BoardController:
                     self.board[self._size - y - 1][x].pion = pion2
                     self._players[1].pions.append(pion2)
         self.set_board_neighbors()
-
-    # TODO: Finir cette fonction qui devra retourner une liste de cellule jouable selon le joueur entre (la mort ptn)
-    def get_playable_cells(self, pion: Pion, player: Player):
-        pass
 
     def set_board_neighbors(self):
         for y in range(self._size):
@@ -84,8 +75,6 @@ class BoardController:
                     cell.neighbors.append(neighbor)
                 else:
                     cell.neighbors.append(None)
-
-
 
     # Propertys
     @property

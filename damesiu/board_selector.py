@@ -81,6 +81,7 @@ class BoardSelector(EventHandler, metaclass=BoardSelectorSingleton):
             self._select()
 
     def _highlight(self, cell):
+        self.graphic_engine.add_message(f"Cellule selectionnee : {cell.x} {cell.y}")
         self.current_cell.highlighted = False
         cell.highlighted = True
         self.current_cell = cell
