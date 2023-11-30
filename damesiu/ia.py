@@ -31,7 +31,7 @@ class EventHandler(object):
 class IA(EventHandler):
 
     def turn(self, board: BoardController):
-        sleep(0.5)
+        sleep(0.2)
         board_selector = BoardSelector(board)
         game_state = GameState()
         player_pions = game_state.current_player.pions

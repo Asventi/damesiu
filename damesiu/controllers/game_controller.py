@@ -12,7 +12,7 @@ class GameController:
     def __init__(self):
         playername = "Asventi"  # input('Entre ton nom de joueur  : \n ')
         self.size = 10  # int(input('Quel taille de tableau : () \n'))
-        self.players = [Player("IA", "blanc", 0, is_ia=True), Player(playername, "noir", 1, is_ia=True)]
+        self.players = [Player("IA", "blanc", 0, is_ia=True), Player(playername, "noir", 1, is_ia=False)]
         self.board_controller = BoardController(players=self.players, size=self.size)
         self.board_selector = BoardSelector(self.board_controller)
         self.graphic_engine = Engine()
@@ -45,6 +45,10 @@ class GameController:
             self.game_state.current_player.ia.turn(board=self.board_controller)
 
     def move(self, source: Cell, target: Cell):
+        if source.pion is None:
+            print('bug bizarre')
+            self.end_turn()
+            return
         eat_move = False
         for cell in self.board_selector.playable_cells:
             cell.playable = False
@@ -56,7 +60,9 @@ class GameController:
             eat_move = True
             eat_x = source.x + (target.x - source.x) // 2
             eat_y = source.y + (target.y - source.y) // 2
-            source.pion.player.score += 1
+            self.game_state.current_player.score += 1
+            self.board_controller.board[eat_y][eat_x].pion.player.pions.remove(
+                self.board_controller.board[eat_y][eat_x].pion)
             self.board_controller.board[eat_y][eat_x].pion = None
 
         target.pion = source.pion
