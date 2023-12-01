@@ -56,6 +56,7 @@ class GameController:
             sleep(5)
             exit()
 
+        current_player = self.game_state.current_player
         eat_move = False
         for cell in self.board_selector.playable_cells:
             cell.playable = False
@@ -67,11 +68,15 @@ class GameController:
             eat_move = True
             eat_x = source.x + (target.x - source.x) // 2
             eat_y = source.y + (target.y - source.y) // 2
-            self.game_state.current_player.score += 1
+            current_player.score += 1
             self.board_controller.board[eat_y][eat_x].pion.delete()
-        elif not self.game_state.current_player.is_ia:
-            # Verifier l'existence de saut possibles
-            pass
+        elif not current_player.is_ia:
+            # Verification si le joueur mange un pion adverse si il le peut, sinon annule le mouvement
+            eat_moves = current_player.get_all_moves(only_eat=True)
+            if len(eat_moves) > 0:
+                self.graphic_engine.add_alert("Vous devez manger un pion adverse.")
+                return
+
 
         target.pion = source.pion
         source.pion = None
@@ -79,7 +84,7 @@ class GameController:
             playable_cells = target.pion.get_playable_cells("all")
             if len(playable_cells) > 0:
                 self.game_state.pion_lock = target.pion
-                if self.game_state.current_player.is_ia:
+                if current_player.is_ia:
                     self.graphic_engine.draw_board(self.board_controller)
                     ia.turn(board=self.board_controller, game_controller=self)
                     return
@@ -97,7 +102,7 @@ class GameController:
         if (target.pion.color == "white" and target.pion.y == self.size - 1 or target.pion.color == "black"
                 and target.pion.y == 0):
             self.graphic_engine.add_message(
-                f'{self.game_state.current_player.name} a fait une dame et gagne 2 points de score')
+                f'{current_player.name} a fait une dame et gagne 2 points de score')
             self.game_state.current_player.score += 2
             target.pion.delete()
             sleep(1)
