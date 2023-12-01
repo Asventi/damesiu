@@ -1,4 +1,7 @@
 class EventHandler(object):
+    """
+    Un event handler classique
+    """
     callbacks = None
 
     def on(self, eh_name, callback):

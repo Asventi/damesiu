@@ -36,78 +36,103 @@ class BoardSelectorSingleton(type):
 class BoardSelector(EventHandler, metaclass=BoardSelectorSingleton):
 
     def __init__(self, board_controller: BoardController):
-        self.graphic_engine = BoardEngine()
-        self.board_controller = board_controller
-        self.game_state = GameState()
+        self._graphic_engine = BoardEngine()
+        self._board_controller = board_controller
+        self._game_state = GameState()
 
-        self.current_cell: Cell = self.board_controller.board[0][0]
-        self.selected_cell: Cell | None = None
-        self.playable_cells: list[Cell] = []
-        self._highlight(self.current_cell)
+        self._current_cell: Cell = self._board_controller.board[0][0]
+        self._selected_cell: Cell | None = None
+        self._playable_cells: list[Cell] = []
+        self._highlight(self._current_cell)
 
-        self.graphic_engine.on("key_pressed", self._move_cursor)
+        self._graphic_engine.on("key_pressed", self._move_cursor)
 
     def _move_cursor(self, key):
-        self._highlight(self.current_cell)
-        if key == curses.KEY_UP and self.current_cell.neighbors[directions.N]:
-            self._highlight(self.current_cell.neighbors[directions.N])
+        self._highlight(self._current_cell)
+        if key == curses.KEY_UP and self._current_cell.neighbors[directions.N]:
+            self._highlight(self._current_cell.neighbors[directions.N])
 
-        elif key == curses.KEY_DOWN and self.current_cell.neighbors[directions.S]:
-            self._highlight(self.current_cell.neighbors[directions.S])
+        elif key == curses.KEY_DOWN and self._current_cell.neighbors[directions.S]:
+            self._highlight(self._current_cell.neighbors[directions.S])
 
-        elif key == curses.KEY_LEFT and self.current_cell.neighbors[directions.W]:
-            self._highlight(self.current_cell.neighbors[directions.W])
+        elif key == curses.KEY_LEFT and self._current_cell.neighbors[directions.W]:
+            self._highlight(self._current_cell.neighbors[directions.W])
 
-        elif key == curses.KEY_RIGHT and self.current_cell.neighbors[directions.E]:
-            self._highlight(self.current_cell.neighbors[directions.E])
+        elif key == curses.KEY_RIGHT and self._current_cell.neighbors[directions.E]:
+            self._highlight(self._current_cell.neighbors[directions.E])
 
         elif key == 10:
             self._select()
 
     def _highlight(self, cell):
-        self.current_cell.highlighted = False
+        self._current_cell.highlighted = False
         cell.highlighted = True
-        self.current_cell = cell
+        self._current_cell = cell
 
         self.update()
 
     def _select(self):
-        if self.current_cell.pion is not None and self.current_cell.pion.player != self.game_state.current_player:
-            self.graphic_engine.add_alert("Ce n'est pas votre pion ou ce n'est pas votre tour !")
+        if self._current_cell.pion is not None and self._current_cell.pion.player != self._game_state.current_player:
+            self._graphic_engine.add_alert("Ce n'est pas votre pion ou ce n'est pas votre tour !")
             return
 
-        if self.current_cell.playable:
-            self.trigger("move_selected", source=self.selected_cell, target=self.current_cell)
+        if self._current_cell.playable:
+            self.trigger("move_selected", source=self._selected_cell, target=self._current_cell)
             return
 
-        if self.game_state.pion_lock is not None:
-            self.graphic_engine.add_alert("Vous avez des pions a finir de manger.")
+        if self._game_state.pion_lock is not None:
+            self._graphic_engine.add_alert("Vous avez des pions a finir de manger.")
             return
 
-        for cell in self.playable_cells:
+        for cell in self._playable_cells:
             cell.playable = False
-        self.playable_cells = []
-        if self.current_cell == self.selected_cell:
-            self.selected_cell.selected = False
-            self.selected_cell = None
-            self.current_cell.highlighted = True
+        self._playable_cells = []
+        if self._current_cell == self._selected_cell:
+            self._selected_cell.selected = False
+            self._selected_cell = None
+            self._current_cell.highlighted = True
         else:
 
             # On deselectionne l'ancienne cell selectionne et on enleve l'highlight
-            if self.selected_cell is not None:
-                self.selected_cell.selected = False
-            self.current_cell.highlighted = False
+            if self._selected_cell is not None:
+                self._selected_cell.selected = False
+            self._current_cell.highlighted = False
 
             # On selectionne la cell et on la stock
-            self.selected_cell = self.current_cell
-            self.selected_cell.selected = True
-            if self.selected_cell.pion is not None:
-                self.playable_cells = self.selected_cell.pion.get_playable_cells()
-                for cell in self.playable_cells:
+            self._selected_cell = self._current_cell
+            self._selected_cell.selected = True
+            if self._selected_cell.pion is not None:
+                self._playable_cells = self._selected_cell.pion.get_playable_cells()
+                for cell in self._playable_cells:
                     cell.playable = True
 
         # On met a jour le board
         self.update()
 
     def update(self):
-        self.graphic_engine.draw_board(self.board_controller)
+        self._graphic_engine.draw_board(self._board_controller)
+
+    @property
+    def current_cell(self):
+        return self._current_cell
+
+    @current_cell.setter
+    def current_cell(self, cell: Cell):
+        self._current_cell = cell
+        self._highlight(cell)
+
+    @property
+    def selected_cell(self):
+        return self._selected_cell
+
+    @selected_cell.setter
+    def selected_cell(self, cell: Cell):
+        self._selected_cell = cell
+
+    @property
+    def playable_cells(self):
+        return self._playable_cells
+
+    @playable_cells.setter
+    def playable_cells(self, cells: list[Cell]):
+        self._playable_cells = cells

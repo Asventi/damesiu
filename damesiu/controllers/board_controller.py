@@ -20,11 +20,17 @@ class BoardController:
         self.starter()
 
     def starter(self):
+        """
+        Fonction qui lance le jeu, elle crée le plateau, ajoute les pions, et lance le moteur graphique
+        """
         self.create_board()
         self.add_pions()
         self.graphic_engine.draw_board(self)
 
     def create_board(self):
+        """
+        Fonction qui crée le plateau
+        """
         if len(self.board) > 0:
             self.board = []
 
@@ -34,6 +40,9 @@ class BoardController:
                 self.board[y].append(Cell(y, x))
 
     def add_pions(self):
+        """
+        Fonction qui ajoute les pions sur le plateau
+        """
         pions_count = int(self._size / 2 - 1)
         for y in range(pions_count):
             for x in range(self._size):
@@ -46,10 +55,13 @@ class BoardController:
         self.set_board_neighbors()
 
     def set_board_neighbors(self):
+        """
+        Fonction qui ajoute les voisins de chaque cellule du plateau
+        """
         for y in range(self._size):
             for cell in self.board[y]:
                 for i in range(3):
-                    if 0 <= cell.x + i - 1 < self._size and y != 0:
+                    if self._size > cell.x + i - 1 >= 0 != y:
                         neighbor = self.board[y - 1][cell.x + i - 1]
                         cell.neighbors.append(neighbor)
                     else:

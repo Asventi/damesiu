@@ -89,7 +89,7 @@ class GameController:
                     ia.turn(board=self.board_controller, game_controller=self)
                     return
                 else:
-                    self.board_selector.playable_cells = playable_cells
+                    self.board_selector._playable_cells = playable_cells
                     for cell in self.board_selector.playable_cells:
                         cell.playable = True
                     target.selected = True
