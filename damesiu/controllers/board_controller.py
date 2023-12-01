@@ -6,7 +6,7 @@ if TYPE_CHECKING:
 
 from damesiu.objects import Cell
 from damesiu.objects import Pion
-from damesiu.graphic_engine import GraphicEngine
+from damesiu.graphic_engine import BoardEngine
 
 
 class BoardController:
@@ -15,7 +15,7 @@ class BoardController:
         self._size = size
 
         self.board: list[list[Cell]] = []
-        self.graphic_engine = GraphicEngine()
+        self.graphic_engine = BoardEngine()
 
         self.starter()
 

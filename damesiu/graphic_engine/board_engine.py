@@ -33,7 +33,7 @@ class GraphicEngineSingleton(type):
         return cls._instances[cls]
 
 
-class Engine(EventHandler, metaclass=GraphicEngineSingleton):
+class BoardEngine(EventHandler, metaclass=GraphicEngineSingleton):
     """
     La classe moteur graphique console pour le jeu
     """

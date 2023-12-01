@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from damesiu.objects import Pion
     from damesiu.objects import Cell
 
-from damesiu.graphic_engine import GraphicEngine
+from damesiu.graphic_engine import BoardEngine
 from time import sleep
 from damesiu.game_state import GameState
 
@@ -42,7 +42,7 @@ class Player:
 
     @score.setter
     def score(self, score: int):
-        graphic_engine = GraphicEngine()
+        graphic_engine = BoardEngine()
         self._score = score
         graphic_engine.set_score(self._score, self.name, self.playercode)
         if self._score >= 20:

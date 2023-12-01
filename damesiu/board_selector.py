@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from damesiu.controllers.board_controller import BoardController
     from damesiu.objects import Cell
 
-from damesiu.graphic_engine import GraphicEngine
+from damesiu.graphic_engine import BoardEngine
 from damesiu.game_state import GameState
 import curses
 from threading import Lock
@@ -36,7 +36,7 @@ class BoardSelectorSingleton(type):
 class BoardSelector(EventHandler, metaclass=BoardSelectorSingleton):
 
     def __init__(self, board_controller: BoardController):
-        self.graphic_engine = GraphicEngine()
+        self.graphic_engine = BoardEngine()
         self.board_controller = board_controller
         self.game_state = GameState()
 

@@ -3,7 +3,7 @@ from typing import Optional
 from damesiu.controllers.board_controller import BoardController
 from damesiu.objects import Player
 from damesiu.board_selector import BoardSelector
-from damesiu.graphic_engine import GraphicEngine
+from damesiu.graphic_engine import BoardEngine
 from damesiu.game_state import GameState
 from damesiu.objects import Cell
 from time import sleep
@@ -11,12 +11,16 @@ from damesiu import ia
 
 class GameController:
     def __init__(self):
+        # Initialisation du jeu
+
+
+
         playername = "Asventi"  # input('Entre ton nom de joueur  : \n ')
         self.size = 10  # int(input('Quel taille de tableau : () \n'))
-        self.players = [Player("IA", "blanc", 0, is_ia=True), Player(playername, "noir", 1, is_ia=False)]
+        self.players = [Player("IA", "blanc", 0, is_ia=True), Player(playername, "noir", 1, is_ia=True)]
         self.board_controller = BoardController(players=self.players, size=self.size)
         self.board_selector = BoardSelector(self.board_controller)
-        self.graphic_engine = GraphicEngine()
+        self.graphic_engine = BoardEngine()
         self.game_state = GameState()
         self.game_state.current_player = self.players[0]
 
@@ -76,7 +80,6 @@ class GameController:
             if len(eat_moves) > 0:
                 self.graphic_engine.add_alert("Vous devez manger un pion adverse.")
                 return
-
 
         target.pion = source.pion
         source.pion = None
