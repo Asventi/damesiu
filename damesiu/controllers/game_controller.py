@@ -1,23 +1,20 @@
 from typing import Optional
-
 from damesiu.controllers.board_controller import BoardController
-from damesiu.objects import Player
 from damesiu.board_selector import BoardSelector
 from damesiu.graphic_engine import BoardEngine
 from damesiu.game_state import GameState
-from damesiu.objects import Cell
+from damesiu.objects import Cell, Player
 from time import sleep
 from damesiu import ia
+from damesiu.graphic_engine import game_parameters
+
 
 class GameController:
     def __init__(self):
         # Initialisation du jeu
-
-
-
-        playername = "Asventi"  # input('Entre ton nom de joueur  : \n ')
-        self.size = 10  # int(input('Quel taille de tableau : () \n'))
-        self.players = [Player("IA", "blanc", 0, is_ia=True), Player(playername, "noir", 1, is_ia=True)]
+        self.size = 10
+        self.game_parameters = game_parameters()
+        self.players = [Player(**self.game_parameters[0]), Player(**self.game_parameters[1])]
         self.board_controller = BoardController(players=self.players, size=self.size)
         self.board_selector = BoardSelector(self.board_controller)
         self.graphic_engine = BoardEngine()

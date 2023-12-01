@@ -11,7 +11,16 @@ import random
 from time import sleep
 
 
-def turn(board: BoardController, game_controller: GameController):
+def turn(board: BoardController, game_controller: GameController) -> None:
+    """
+    Fonction qui gere le tour de l'ia, elle choisit un mouvement aleatoire parmis les mouvements possibles, si aucun
+    mouvement n'est possible, elle passe son tour. Elle priorise les mouvements qui permettent de manger un pion.
+    Un delai de 0.2 secondes est ajouté pour que l'ia ne joue pas instantanement, et que cela rendre les mouvements
+    dur a suivre pour le joueur.
+
+    :param board: BoardController du jeu
+    :param game_controller: GameController du jeu
+    """
     sleep(0.2)
     board_selector = BoardSelector(board)
     game_state = GameState()
@@ -35,6 +44,9 @@ def turn(board: BoardController, game_controller: GameController):
         move = random.choice(moves)
         board_selector.selected_cell = move[0].cell
         game_controller.move(source=move[0].cell, target=move[1])
+
+# Premiere ebauche non fonctionnelle de l'ia par Maxence GAUCHET, cette algorithme marchait a base de minmax mais
+# n'etait pas fonctionnel, il a donc ete abandonné pour une ia moins intelligente mais plus facile a mettre en place.
 
 # def minmax(self, pion, depth, maxim, board):
 #     if depth == 0:

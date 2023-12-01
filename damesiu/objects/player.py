@@ -9,18 +9,17 @@ from damesiu.graphic_engine import BoardEngine
 from time import sleep
 from damesiu.game_state import GameState
 
+
 class Player:
 
     def __init__(self, name: str, color: str, playercode: int, is_ia: bool = False):
-        self.name = name
-        self.color = color
-        self.playercode = playercode
-        self.is_ia = is_ia
+        self._name = name
+        self._color = color
+        self._playercode = playercode
+        self._is_ia = is_ia
 
         self._score: int = 0
-        self.pions: list[Pion] = []
-        self.is_playing: bool = False
-        self.is_winner: bool = False
+        self._pions: list[Pion] = []
 
     def get_all_moves(self, only_eat: bool = False) -> List[Tuple[Pion, Cell]]:
         """
@@ -51,3 +50,37 @@ class Player:
             sleep(5)
             game_state.game_ended = True
             exit()
+
+    # Getters Setters
+    @property
+    def pions(self):
+        return self._pions
+
+    @pions.setter
+    def pions(self, pions: list[Pion]):
+        for pion in pions:
+            if pion.color != self.color:
+                raise Exception("Un pion n'a pas la bonne couleur")
+            if pion.player != self:
+                raise Exception("Un pion n'appartient pas au bon joueur")
+
+        self._pions = pions
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def color(self):
+        return self._color
+
+    @property
+    def playercode(self):
+        return self._playercode
+
+    @property
+    def is_ia(self):
+        return self._is_ia
+
+    def __repr__(self):
+        return f"Player(name: {self.name}, color: {self.color}, score: {self._score})"

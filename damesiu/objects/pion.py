@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Optional
 
 if TYPE_CHECKING:
     from damesiu.objects import Player, Cell
@@ -20,12 +20,12 @@ class Pion:
     :param player: Joueur auquel appartient le pion
     """
     def __init__(self, y: int, x: int, color: str, cell: Cell, player: Player):
-        self.x = x
-        self.y = y
-        self.color = color
-        self.player = player
-        self.cell = cell
-        self.player.pions.append(self)
+        self._x = x
+        self._y = y
+        self._color = color
+        self._player = player
+        self._cell = cell
+        self._player.pions.append(self)
 
     def get_playable_cells(self, direction: str = None, only_eat: bool = False) -> List[Cell]:
         """
@@ -65,7 +65,16 @@ class Pion:
 
         return playable_cells
 
-    def get_playable_cell(self, direction, only_eat: bool = False) -> Cell | None:
+    def get_playable_cell(self, direction: int, only_eat: bool = False) -> Optional[Cell]:
+        """
+        Fonction qui retourne la cellule jouable dans la entrée en parametre, si aucun mouvement n'est possible
+        retourne None, on peut aussi retourner seulement les cellules jouables pour manger un pion adverse.
+
+        :param direction: Direction dans laquelle chercher la cellule jouable
+        :param only_eat: Retourne ou pas seulement les cellules jouables pour manger un pion adverse
+        :return: Cellule jouable ou None
+        :rtype: Optional[Cell]
+        """
         neighbor = self.cell.neighbors[direction]
 
         if neighbor is not None:
@@ -78,9 +87,45 @@ class Pion:
                 return neighbor
         return None
 
-    def delete(self):
+    def delete(self) -> None:
+        """
+        Supprime le pion, retire le pion de la liste des pions du joueur et supprime le pion de la cellule
+        """
         self.cell.pion = None
         self.player.pions.remove(self)
 
+    # Getters Setters
+    @property
+    def player(self):
+        return self._player
+
+    @property
+    def cell(self):
+        return self._cell
+
+    @cell.setter
+    def cell(self, cell: Cell):
+        self._cell = cell
+
+    @property
+    def x(self):
+        return self._x
+
+    @x.setter
+    def x(self, x: int):
+        self._x = x
+
+    @property
+    def y(self):
+        return self._y
+
+    @y.setter
+    def y(self, y: int):
+        self._y = y
+
+    @property
+    def color(self):
+        return self._color
+
     def __repr__(self):
-        return f"Pion({self.y}, {self.x}, {self.color}, {self.cell}, {self.player})"
+        return f"Pion(y: {self.y}, x: {self.x}, {self.color})"
