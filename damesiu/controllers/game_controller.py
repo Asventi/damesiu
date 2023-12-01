@@ -44,7 +44,8 @@ class GameController:
         Gere le deplacement d'un pion en fonction de la cellule source et la cellule cible, gere automatiquement les
         cas ou le joueur doit manger un pion adverse, si un mouvement multiple est possible, le pion bougé sera bloqué
         et seulement les mouvements sautés de ce pion seront jouable par le joueur detenteur du pion.
-        Si la source et la target sont None, alors le jeu est fini
+        Si la source et la target sont None, alors le jeu est fini. Oblige le joueur a jouer un mouvement ou il peut
+        manger un pion adverse, si il y en a.
 
         :param source: Cellule source du pion, ne doit pas etre sans pion
         :param target: Cellule cible du pion, ne doit pas avoir de pion
@@ -68,6 +69,9 @@ class GameController:
             eat_y = source.y + (target.y - source.y) // 2
             self.game_state.current_player.score += 1
             self.board_controller.board[eat_y][eat_x].pion.delete()
+        elif not self.game_state.current_player.is_ia:
+            # Verifier l'existence de saut possibles
+            pass
 
         target.pion = source.pion
         source.pion = None

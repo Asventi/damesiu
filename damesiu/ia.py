@@ -15,19 +15,15 @@ def turn(board: BoardController, game_controller: GameController):
     sleep(0.2)
     board_selector = BoardSelector(board)
     game_state = GameState()
-    player_pions = game_state.current_player.pions
     eat_moves = []
     moves = []
     if game_state.pion_lock:
         for eat_move_lock in game_state.pion_lock.get_playable_cells(direction='all'):
-            eat_moves.append([game_state.pion_lock, eat_move_lock])
+            eat_moves.append((game_state.pion_lock, eat_move_lock))
 
     else:
-        for pion in player_pions:
-            for eat_move in pion.get_playable_cells(only_eat=True):
-                eat_moves.append([pion, eat_move])
-            for move in pion.get_playable_cells():
-                moves.append([pion, move])
+        eat_moves = game_state.current_player.get_all_moves(only_eat=True)
+        moves = game_state.current_player.get_all_moves()
     if len(eat_moves) > 0:
         move = random.choice(eat_moves)
         board_selector.selected_cell = move[0].cell
