@@ -1,6 +1,6 @@
 # Projet Jeu de Dames en Python
 
-Ce projet a été réalisé par Pierre JARNAC dans le cadre d'un projet scolaire pour l'ECAM LaSalle.
+Ce projet a été réalisé dans le cadre d'un projet scolaire pour l'ECAM LaSalle.
 
 ## Description du Projet
 
@@ -44,4 +44,3 @@ Le projet consiste en la création d'un jeu de dames en Python. Les fonctionnali
 
 *Bon jeu !*
 
-*Pierre JARNAC
