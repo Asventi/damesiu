@@ -1,10 +1,10 @@
 # Projet Jeu de Dames en Python
 
-Ce projet a été réalisé par Pierre JARNAC, Maxence GAUCHET, et Benjamin JESAISPLUSQUOI dans le cadre d'un projet scolaire pour l'ECAM LaSalle.
+Ce projet a été réalisé par Pierre JARNAC dans le cadre d'un projet scolaire pour l'ECAM LaSalle.
 
 ## Description du Projet
 
-Le projet consiste en la création d'un jeu de dames en Python. Les fonctionnalités principales incluent la possibilité de jouer contre un autre joueur ou contre une intelligence artificielle. Le jeu suit les règles classiques des dames.
+Le projet consiste en la création d'un jeu de dames en Python. Les fonctionnalités principales incluent la possibilité de jouer contre un autre joueur ou contre une intelligence artificielle. Le jeu suit pas exactement les règles classiques des dames car flemme de faire le mouvement des dames y'avait pas le temps.
 
 ## Fonctionnalités
 
@@ -40,18 +40,8 @@ Le projet consiste en la création d'un jeu de dames en Python. Les fonctionnali
 
 5. **Jouez et Amusez-vous !**
 
-## Contributions
-
-Toute contribution ou suggestion d'amélioration est la bienvenue. N'hésitez pas à ouvrir une issue ou à proposer une pull request sur le [dépôt GitHub](lien_github).
-
-## Remerciements
-
-Nous tenons à remercier l'équipe pédagogique de l'ECAM LaSalle pour son soutien tout au long du projet.
-
 ---
 
 *Bon jeu !*
 
-*Pierre JARNAC, Maxence GAUCHET, Benjamin JESAISPLUSQUOI*
-
-[lien_github]: <mettez ici le lien GitHub de votre projet>
+*Pierre JARNAC
