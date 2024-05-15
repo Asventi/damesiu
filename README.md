@@ -4,7 +4,7 @@ Ce projet a été réalisé par Pierre JARNAC dans le cadre d'un projet scolaire
 
 ## Description du Projet
 
-Le projet consiste en la création d'un jeu de dames en Python. Les fonctionnalités principales incluent la possibilité de jouer contre un autre joueur ou contre une intelligence artificielle. Le jeu suit pas exactement les règles classiques des dames car flemme de faire le mouvement des dames y'avait pas le temps. La particularité est l'interface graphique du plateau de jeu dans la console, completement fait main et ca a été bien chiant je vous l'assure.
+Le projet consiste en la création d'un jeu de dames en Python. Les fonctionnalités principales incluent la possibilité de jouer contre un autre joueur ou contre une intelligence artificielle. Le jeu suit pas exactement les règles classiques des dames car flemme de faire le mouvement des dames y'avait pas le temps. La particularité est l'interface graphique du plateau de jeu dans la console, completement fait main et ca a été bien chiant je vous l'assure. Ce readme est en grande partie fait avec ChatGPT car flemme de faire un truc propre
 
 ## Fonctionnalités
 
